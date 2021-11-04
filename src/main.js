@@ -3,12 +3,16 @@ const $lastLi = $siteList.find("li.last");
 const x = localStorage.getItem("x");
 const xObject = JSON.parse(x);
 const hashMap = xObject || [
-  { logo: "D", logoType: "text", url: "developer.mozilla.org" },
-  { logo: "images/bilibili.png", logoType: "image", url: "bilibili.com" },
+  { logo: "D", logoType: "text", url: "https://developer.mozilla.org" },
+  {
+    logo: "./images/bilibili.png",
+    logoType: "image",
+    url: "https://www.bilibili.com",
+  },
 ];
 
 const render = () => {
-  $siteList.find("li:not(.last").remove();
+  $siteList.find("li:not(.last)").remove();
   hashMap.forEach((node) => {
     const $li = $(`<li>
         <a href="${node.url}">
@@ -28,7 +32,6 @@ $(".addButton").on("click", () => {
   if (url.indexOf("http") !== 0) {
     url = "https://" + url;
   }
-  console.log(url);
   hashMap.push({
     logo: url[0],
     logoType: "text",

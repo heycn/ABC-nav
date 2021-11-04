@@ -3,25 +3,40 @@ const $lastLi = $siteList.find("li.last");
 const x = localStorage.getItem("x");
 const xObject = JSON.parse(x);
 const hashMap = xObject || [
-  { logo: "D", logoType: "text", url: "https://developer.mozilla.org" },
-  {
-    logo: "./images/bilibili.png",
-    logoType: "image",
-    url: "https://www.bilibili.com",
-  },
+  { logo: "D", url: "https://developer.mozilla.org" },
+  { logo: "B", url: "https://www.bilibili.com" },
 ];
+
+const simplifyUrl = (url) => {
+  return url
+    .replace("https://", "")
+    .replace("http://", "")
+    .replace("www.", "")
+    .replace(/\/.*/, ""); // 删除 / 开头的内容
+};
 
 const render = () => {
   $siteList.find("li:not(.last)").remove();
-  hashMap.forEach((node) => {
+  hashMap.forEach((node, index) => {
     const $li = $(`<li>
-        <a href="${node.url}">
-          <div class="site">
-            <div class="logo">${node.logo[0]}</div>
-            <div class="link">${node.url}</div>
-          </div>
-        </a>
-      </li>`).insertBefore($lastLi);
+      <div class="site">
+        <div class="logo">${node.logo}</div>
+        <div class="link">${simplifyUrl(node.url)}</div>
+        <div class="close">
+          <svg class="icon">
+            <use xlink:href="#icon-close"></use>
+          </svg>
+        </div>
+      </div>
+    </li>`).insertBefore($lastLi);
+    $li.on("click", () => {
+      window.open(node.url);
+    });
+    $li.on("click", ".close", (e) => {
+      e.stopPropagation(); // 阻止冒泡，避免点击关闭按钮跳转页面
+      hashMap.splice(index, 1);
+      render();
+    });
   });
 };
 
@@ -33,8 +48,7 @@ $(".addButton").on("click", () => {
     url = "https://" + url;
   }
   hashMap.push({
-    logo: url[0],
-    logoType: "text",
+    logo: simplifyUrl(url)[0].toUpperCase(),
     url: url,
   });
   render();
@@ -44,3 +58,12 @@ window.onbeforeunload = () => {
   const string = JSON.stringify(hashMap);
   localStorage.setItem("x", string);
 };
+
+$(document).on("keypress", (e) => {
+  const { key } = e; // key = e.key  简写
+  for (let i = 0; i < hashMap.length; i++) {
+    if (hashMap[i].logo.toLowerCase() === key) {
+      window.open(hashMap[i].url);
+    }
+  }
+});

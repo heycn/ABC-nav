@@ -60,10 +60,14 @@ window.onbeforeunload = () => {
 };
 
 $(document).on("keypress", (e) => {
-  const { key } = e; // key = e.key  简写
+  const { key } = e; // const key = e.key  简写
   for (let i = 0; i < hashMap.length; i++) {
     if (hashMap[i].logo.toLowerCase() === key) {
       window.open(hashMap[i].url);
     }
   }
+});
+
+$(".searchForm").on("keypress", (e) => {
+  e.stopPropagation(); // 阻止冒泡，避免在搜索框输入英文字母时跳转页面
 });

@@ -149,7 +149,7 @@ window.onbeforeunload = function () {
 };
 
 $(document).on("keypress", function (e) {
-  var key = e.key; // key = e.key  简写
+  var key = e.key; // const key = e.key  简写
 
   for (var i = 0; i < hashMap.length; i++) {
     if (hashMap[i].logo.toLowerCase() === key) {
@@ -157,5 +157,9 @@ $(document).on("keypress", function (e) {
     }
   }
 });
+
+$(".searchForm").on("keypress", function (e) {
+  e.stopPropagation(); // 阻止冒泡，避免在搜索框输入英文字母时跳转页面
+});
 },{}]},{},["epB2"], null)
-//# sourceMappingURL=main.1e84a9b3.map
+//# sourceMappingURL=main.0b6d2a42.map
